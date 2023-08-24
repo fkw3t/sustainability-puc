@@ -1,0 +1,11 @@
+version: '3'
+services:
+  hyperf_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+#    command: ["php", "bin/hyperf.php", "start"]
+    ports:
+      - "9999:9999"
+    volumes:
+      - .:/opt/www
