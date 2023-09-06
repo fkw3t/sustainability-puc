@@ -5,15 +5,13 @@ namespace App\Application\DTO\BarcodeManager\Request;
 
 use App\Application\DTO\DTO;
 
-class UsageLimitResponseDTO extends DTO
+class GetProductRequestDTO extends DTO
 {
     protected static array $validateRules = [];
 
     public function __construct(
-        public int $allowedCallsMonth,
-        public int $remainingCallsMonth,
-        public int $allowedCallsMinute,
-        public int $remainingCallsMinute,
+        public string $searchableFieldType,
+        public string $searchableFieldValue
     ) {
     }
 }

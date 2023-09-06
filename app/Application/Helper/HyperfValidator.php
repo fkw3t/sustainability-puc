@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Application\Helper;
 
-use App\Application\Contracts\DTOInterface;
-use App\Application\Contracts\ValidatorInterface;
 use App\Application\Exception\HyperfValidationException;
+use App\Application\Interface\DTOInterface;
+use App\Application\Interface\ValidatorInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Swoole\Http\Status;
 

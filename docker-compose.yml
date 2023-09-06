@@ -1,6 +1,7 @@
 version: '3'
 services:
   app:
+    container_name: sustainability-app
     build:
       context: .
       dockerfile: Dockerfile
@@ -8,3 +9,26 @@ services:
         - "9999:9999"
     volumes:
       - .:/opt/www
+    depends_on:
+      - db
+    networks:
+      - sustainability
+  db:
+    image: mysql:5.7
+    container_name: sustainability-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - "3308:3306"
+    networks:
+      - sustainability
+networks:
+  sustainability:
+    driver: bridge
