@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Http\BarcodeManager\Request;
+namespace App\Infrastructure\Http\Product\Request;
 
 use Hyperf\Validation\Request\FormRequest;
 

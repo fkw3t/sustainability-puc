@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace App\Application\DTO\BarcodeManager\Request;
+namespace App\Application\DTO\ExternalProductManager\Request;
 
 use App\Application\DTO\DTO;
 

@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Application\Service;
 
-use App\Application\DTO\BarcodeManager\Structure\ProductResponseDTO;
-use App\Application\DTO\BarcodeManager\Structure\ProductsResponseDTO;
-use App\Application\Interface\BarcodeManagerServiceInterface;
-use App\Domain\Repository\BarcodeManagerRepositoryInterface;
+use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
+use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
+use App\Application\Interface\ExternalProductManagerServiceInterface;
+use App\Domain\Repository\ExternalProductManagerRepositoryInterface;
 use App\Domain\Repository\ProductRepositoryInterface;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
-class BarcodeManagerService implements BarcodeManagerServiceInterface
+class ExternalProductManagerService implements ExternalProductManagerServiceInterface
 {
     private LoggerInterface $logger;
 
     public function __construct(
-        private BarcodeManagerRepositoryInterface $barcodeManagerRepository,
+        private ExternalProductManagerRepositoryInterface $externalProductManagerRepository,
         private ProductRepositoryInterface $productRepository,
         LoggerFactory $loggerFactory,
     ) {

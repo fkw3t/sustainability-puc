@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
-use App\Application\DTO\BarcodeManager\Structure\ProductResponseDTO;
-use App\Application\DTO\BarcodeManager\Structure\ProductsResponseDTO;
-use App\Domain\Repository\BarcodeManagerRepositoryInterface;
+use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
+use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
+use App\Domain\Repository\ExternalProductManagerRepositoryInterface;
 use App\Infrastructure\Guzzle\GuzzleFactory;
 use GuzzleHttp\Client;
 use GuzzleHttp\Utils;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
-class BarcodeManagerRepository implements BarcodeManagerRepositoryInterface
+class ExternalProductManagerRepository implements ExternalProductManagerRepositoryInterface
 {
     protected Client $client;
 

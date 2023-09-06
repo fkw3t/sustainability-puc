@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Application\Interface;
 
-use App\Application\DTO\BarcodeManager\Structure\ProductResponseDTO;
-use App\Application\DTO\BarcodeManager\Structure\ProductsResponseDTO;
+use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
+use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
 
-interface BarcodeManagerServiceInterface
+interface ExternalProductManagerServiceInterface
 {
     public function getProductByBarcode(string $barcode): ProductResponseDTO;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Infrastructure\Http\BarcodeManager\Handler\GetProduct;
+use App\Infrastructure\Http\Product\Handler\GetProduct;
 use Hyperf\HttpServer\Router\Router;
 
 Router::get('/', function () {

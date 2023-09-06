@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Http\BarcodeManager\Handler;
+namespace App\Infrastructure\Http\Product\Handler;
 
-use App\Application\DTO\BarcodeManager\Request\GetProductRequestDTO;
-use App\Application\Interface\BarcodeManagerServiceInterface;
-use App\Infrastructure\Http\BarcodeManager\Request\GetProductRequest;
+use App\Application\DTO\ExternalProductManager\Request\GetProductRequestDTO;
+use App\Application\Interface\ExternalProductManagerServiceInterface;
+use App\Infrastructure\Http\Product\Request\GetProductRequest;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Hyperf\HttpServer\Contract\ResponseInterface;
@@ -19,7 +19,7 @@ final class GetProduct
     private LoggerInterface $logger;
 
     public function __construct(
-        private BarcodeManagerServiceInterface $service,
+        private ExternalProductManagerServiceInterface $service,
         LoggerFactory $loggerFactory,
     ) {
         $this->logger = $loggerFactory->get('log', 'default');
@@ -37,7 +37,7 @@ final class GetProduct
                 'barcode' => $responseDTO = $this->service->getProductByBarcode($productRequestDTO->searchableFieldValue),
                 'name'    => $responseDTO = $this->service->listProductsByName($productRequestDTO->searchableFieldValue),
             };
-            
+
             return $response->json($responseDTO->toArray());
         } catch (ClientException|ServerException $exception) {
             $this->logger->error(__CLASS__ . __FUNCTION__, [

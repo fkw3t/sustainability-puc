@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\DTO\BarcodeManager\Structure;
+namespace App\Application\DTO\ExternalProductManager\Structure;
 
 use App\Application\DTO\DTO;
 
