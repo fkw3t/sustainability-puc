@@ -14,8 +14,8 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->char('barcode', 13)->primary();
             $table->string('name');
-            $table->string('brand')->index();
-            $table->string('description');
+            $table->string('brand')->nullable()->index();
+            $table->string('description', 2000)->nullable();
             $table->decimal('average_price')->nullable();
             $table->string('image_url')->nullable();
             $table->datetimes();

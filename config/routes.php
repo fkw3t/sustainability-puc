@@ -12,6 +12,6 @@ Router::get('/info', function () {
     return phpinfo();
 });
 
-Router::addGroup('/barcode-manager', static function (): void {
-    Router::get('/product', [GetProduct::class, 'handle']);
+Router::addGroup('/product', static function (): void {
+    Router::get('', [GetProduct::class, 'handle']);
 });

@@ -6,9 +6,12 @@ namespace App\Infrastructure\Repository;
 
 use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
 use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
+use App\Application\Exception\InvalidAPIKeyException;
+use App\Application\Exception\ProductNotFoundException;
 use App\Domain\Repository\ExternalProductManagerRepositoryInterface;
 use App\Infrastructure\Guzzle\GuzzleFactory;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Utils;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
@@ -27,63 +30,72 @@ class ExternalProductManagerRepository implements ExternalProductManagerReposito
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
+    /**
+     * @param string $barcode
+     * @return ProductResponseDTO
+     * @throws GuzzleException
+     * @throws InvalidAPIKeyException
+     * @throws ProductNotFoundException
+     */
     public function getByBarcode(string $barcode): ProductResponseDTO
     {
-        $uri = sprintf('gtins/%', $barcode);
+        $uri = sprintf('gtins/%s', $barcode);
         $response = $this->client->get($uri);
 
         return match ($response->getStatusCode()) {
             200 => self::getProductResponseDTO(
                 Utils::jsonDecode($response->getBody()->getContents(), true)
-            )
+            ),
+            404 => throw new ProductNotFoundException(),
+            501 => throw new InvalidAPIKeyException(),
         };
     }
 
+    /**
+     * @param string $name
+     * @return ProductsResponseDTO
+     * @throws GuzzleException
+     * @throws InvalidAPIKeyException
+     * @throws ProductNotFoundException
+     */
     public function listByName(string $name): ProductsResponseDTO
     {
-        return new ProductsResponseDTO([
-            new ProductResponseDTO(
-                '',
-                '',
-                null,
-                null,
-                null,
-                null
+        $uri = sprintf('products?query=%s', $name);
+        $response = $this->client->get($uri);
+
+        return match ($response->getStatusCode()) {
+            200 => self::getProductsResponseDTO(
+                Utils::jsonDecode($response->getBody()->getContents(), true)
             ),
-        ]);
+            404 => throw new ProductNotFoundException(),
+            501 => throw new InvalidAPIKeyException(),
+        };
     }
 
     private function getProductResponseDTO(array $response): ProductResponseDTO
     {
         return new ProductResponseDTO(
-            $response['gtin'],
+            (string) $response['gtin'],
             $response['description'],
-            $response['gpc']['description'] ?? null,
+            $response['ncm']['full_description'] ?? null,
             $response['brand']['name'] ?? null,
-            $response['avg_price'] ?? null,
+            isset($response['avg_price']) && $response['avg_price']
+                ? round($response['avg_price'], 2)
+                : null,
             $response['thumbnail'] ?? null,
         );
     }
 
-    //    public function getByBarcode(): UsageLimitResponseDTO
-    //    {
-    //        $uri = 'v3/rate-limits';
-    //        $response = $this->client->get($uri);
-    //
-    //        return match ($response->getStatusCode()) {
-    //            200 => self::getUsageLimitResponseDTO(
-    //                Utils::jsonDecode($response->getBody()->getContents(), true)
-    //            )
-    //        };
-    //    }
-    //
-    //    private function getUsageLimitResponseDTO(array $response): UsageLimitResponseDTO
-    //    {
-    //        return new UsageLimitResponseDTO(
-    //            (int) $response['allowed_calls_per_month'],
-    //            (int) $response['remaining_calls_per_month'],
-    //            (int) $response['allowed_calls_per_minute'],
-    //            (int) $response['remaining_calls_per_minute']
-    //        );
-    //    }
+    private function getProductsResponseDTO(array $response): ProductsResponseDTO
+    {
+        $products = [];
+
+        foreach ($response['products'] as $product) {
+            $products[] = self::getProductResponseDTO($product);
+        }
+
+        return new ProductsResponseDTO(
+            $products,
+        );
+    }
 }

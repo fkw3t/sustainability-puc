@@ -8,7 +8,6 @@ use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
 use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
 use App\Application\Interface\ExternalProductManagerServiceInterface;
 use App\Domain\Repository\ExternalProductManagerRepositoryInterface;
-use App\Domain\Repository\ProductRepositoryInterface;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
@@ -17,47 +16,27 @@ class ExternalProductManagerService implements ExternalProductManagerServiceInte
     private LoggerInterface $logger;
 
     public function __construct(
-        private ExternalProductManagerRepositoryInterface $externalProductManagerRepository,
-        private ProductRepositoryInterface $productRepository,
+        private readonly ExternalProductManagerRepositoryInterface $repository,
         LoggerFactory $loggerFactory,
     ) {
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
+    /**
+     * @param string $barcode
+     * @return ProductResponseDTO
+     */
     public function getProductByBarcode(string $barcode): ProductResponseDTO
     {
-        return new ProductResponseDTO(
-            '',
-            '',
-            null,
-            null,
-            null,
-            null
-        );
-        //        try {
-        //
-        //        } catch (\Throwable | \Exception $exception) {
-        //
-        //        }
+        return $this->repository->getByBarcode($barcode);
     }
 
+    /**
+     * @param string $name
+     * @return ProductsResponseDTO
+     */
     public function listProductsByName(string $name): ProductsResponseDTO
     {
-        return new ProductsResponseDTO([
-            new ProductResponseDTO(
-                '',
-                '',
-                null,
-                null,
-                null,
-                null
-            ),
-        ]);
-
-        //        try {
-        //
-        //        } catch (\Throwable | \Exception $exception) {
-        //
-        //        }
+        return $this->repository->listByName($name);
     }
 }

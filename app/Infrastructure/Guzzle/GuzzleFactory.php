@@ -27,7 +27,10 @@ class GuzzleFactory
             ->get("guzzle.{$service}");
 
         $handler = HandlerStack::create();
-        if ($this->config['default-query-params']) {
+        if (
+            isset($this->config['default-query-params'])
+            && $this->config['default-query-params']
+        ) {
             $handler->push(
                 new QueryStringMiddleware($this->config['default-query-params'])
             );
