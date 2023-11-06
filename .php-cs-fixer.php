@@ -40,6 +40,11 @@ return (new PhpCsFixer\Config())
             ],
             'sort_algorithm' => 'alpha',
         ],
+        'global_namespace_import' => [
+            'import_classes'   => true,
+            'import_constants' => true,
+            'import_functions' => true,
+        ],
         'single_line_comment_style' => [
             'comment_types' => [
             ],

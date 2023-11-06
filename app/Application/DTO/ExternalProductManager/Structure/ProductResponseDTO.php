@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\DTO\ExternalProductManager\Structure;
 
 use App\Application\DTO\DTO;

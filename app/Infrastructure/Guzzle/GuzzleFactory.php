@@ -9,6 +9,7 @@ use GuzzleHttp\HandlerStack;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Guzzle\ClientFactory;
+use InvalidArgumentException;
 
 class GuzzleFactory
 {
@@ -43,6 +44,6 @@ class GuzzleFactory
                     ['handler' => $handler]
                 )
             )
-            : throw new \InvalidArgumentException("Invalid service. {$service} not found");
+            : throw new InvalidArgumentException("Invalid service. {$service} not found");
     }
 }

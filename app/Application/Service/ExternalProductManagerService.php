@@ -22,19 +22,11 @@ class ExternalProductManagerService implements ExternalProductManagerServiceInte
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
-    /**
-     * @param string $barcode
-     * @return ProductResponseDTO
-     */
     public function getProductByBarcode(string $barcode): ProductResponseDTO
     {
         return $this->repository->getByBarcode($barcode);
     }
 
-    /**
-     * @param string $name
-     * @return ProductsResponseDTO
-     */
     public function listProductsByName(string $name): ProductsResponseDTO
     {
         return $this->repository->listByName($name);

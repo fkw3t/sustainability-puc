@@ -20,10 +20,6 @@ class ProductRepository implements ProductRepositoryInterface
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
-    /**
-     * @param string $barcode
-     * @return Product|null
-     */
     public function findByBarcode(string $barcode): ?Product
     {
         $product = DB::table('products')
@@ -44,11 +40,6 @@ class ProductRepository implements ProductRepositoryInterface
         );
     }
 
-
-    /**
-     * @param Product $product
-     * @return bool
-     */
     public function create(Product $product): bool
     {
         return DB::table('products')->insert([

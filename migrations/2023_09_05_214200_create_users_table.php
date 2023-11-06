@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->string('document_id', 14)->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->date('birthdate');
             $table->datetimes();
         });
     }

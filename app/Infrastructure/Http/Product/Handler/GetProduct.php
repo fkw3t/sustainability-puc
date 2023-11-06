@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Infrastructure\Http\Product\Handler;
 
 use App\Application\DTO\ExternalProductManager\Request\GetProductRequestDTO;
-use App\Application\Exception\ProductNotFoundException;
+use App\Application\Exception\Product\ProductNotFoundException;
 use App\Application\Interface\ExternalProductManagerServiceInterface;
 use App\Application\Interface\ProductServiceInterface;
 use App\Infrastructure\Http\Product\Request\GetProductRequest;
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Hyperf\HttpServer\Contract\ResponseInterface;
@@ -16,6 +17,7 @@ use Hyperf\Logger\LoggerFactory;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response as ResponseCode;
+use Throwable;
 
 final class GetProduct
 {
@@ -30,9 +32,32 @@ final class GetProduct
     }
 
     /**
-     * @param GetProductRequest $request
-     * @param ResponseInterface $response
-     * @return PsrResponseInterface
+     * @OA\Get(
+     *     path="/api/product",
+     *     summary="list product(s)",
+     *     tags={"product"},
+     *     security={{"auth": {}}},
+     *     @OA\Parameter(
+     *         name="searchable_field",
+     *         in="query",
+     *         description="campo de pesquisa (name ou barcode)",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         example="name | barcode"
+     *     ),
+     *     @OA\Parameter(
+     *         name="value",
+     *         in="query",
+     *         description="valor a ser pesquisado",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         example="pao pullman | 7896070511019"
+     *     ),
+     *     @OA\Response(response=200, description="Success"),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=404, description="Product not found"),
+     *     @OA\Response(response=400, description="Bad request"),
+     * )
      */
     public function handle(GetProductRequest $request, ResponseInterface $response): PsrResponseInterface
     {
@@ -43,8 +68,10 @@ final class GetProduct
             );
 
             match ($productRequestDTO->searchableFieldType) {
-                'barcode' => $responseDTO = $this->productService->getProductByBarcode($productRequestDTO->searchableFieldValue),
-                'name'    => $responseDTO = $this->externalProductManagerService->listProductsByName($productRequestDTO->searchableFieldValue),
+                'barcode' => $responseDTO = $this->productService
+                    ->getProductByBarcode($productRequestDTO->searchableFieldValue),
+                'name'    => $responseDTO = $this->externalProductManagerService
+                    ->listProductsByName($productRequestDTO->searchableFieldValue),
             };
 
             return $response->json($responseDTO->toArray())
@@ -64,7 +91,7 @@ final class GetProduct
             return $response->json(
                 ['message' => $exception->getMessage()]
             )->withStatus($exception->getCode());
-        } catch (\Throwable|\Exception $exception) {
+        } catch (Throwable|Exception $exception) {
             $this->logger->error(__CLASS__ . __FUNCTION__, [
                 'message' => $exception->getMessage(),
                 'line'    => $exception->getLine(),

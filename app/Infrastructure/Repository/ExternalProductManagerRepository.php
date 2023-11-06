@@ -7,7 +7,7 @@ namespace App\Infrastructure\Repository;
 use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
 use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
 use App\Application\Exception\InvalidAPIKeyException;
-use App\Application\Exception\ProductNotFoundException;
+use App\Application\Exception\Product\ProductNotFoundException;
 use App\Domain\Repository\ExternalProductManagerRepositoryInterface;
 use App\Infrastructure\Guzzle\GuzzleFactory;
 use GuzzleHttp\Client;
@@ -31,8 +31,6 @@ class ExternalProductManagerRepository implements ExternalProductManagerReposito
     }
 
     /**
-     * @param string $barcode
-     * @return ProductResponseDTO
      * @throws GuzzleException
      * @throws InvalidAPIKeyException
      * @throws ProductNotFoundException
@@ -52,8 +50,6 @@ class ExternalProductManagerRepository implements ExternalProductManagerReposito
     }
 
     /**
-     * @param string $name
-     * @return ProductsResponseDTO
      * @throws GuzzleException
      * @throws InvalidAPIKeyException
      * @throws ProductNotFoundException

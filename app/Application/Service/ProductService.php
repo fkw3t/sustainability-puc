@@ -25,10 +25,6 @@ class ProductService implements ProductServiceInterface
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
-    /**
-     * @param string $barcode
-     * @return ProductResponseDTO
-     */
     public function getProductByBarcode(string $barcode): ProductResponseDTO
     {
         if ($product = $this->repository->findByBarcode($barcode)) {
@@ -41,10 +37,6 @@ class ProductService implements ProductServiceInterface
         return $product;
     }
 
-    /**
-     * @param ProductResponseDTO $product
-     * @return bool
-     */
     public function create(ProductResponseDTO $product): bool
     {
         return $this->repository->create(

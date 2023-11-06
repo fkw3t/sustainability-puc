@@ -14,6 +14,7 @@
     "require": {
         "php": ">=8.0",
         "crayxn/hyperf-xdebug": "dev-main",
+        "firebase/php-jwt": "^6.9",
         "hyperf/cache": "~3.0.0",
         "hyperf/command": "~3.0.0",
         "hyperf/config": "~3.0.0",
@@ -33,7 +34,10 @@
         "hyperf/rpc-server": "~3.0.0",
         "hyperf/tracer": "~3.0.0",
         "hyperf/validation": "^3.0",
-        "hyperf/watcher": "^3.0"
+        "hyperf/view-engine": "^3.0",
+        "hyperf/watcher": "^3.0",
+        "ramsey/uuid": "^4.7",
+        "zircote/swagger-php": "^4.7"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",

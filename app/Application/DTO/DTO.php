@@ -6,10 +6,12 @@ namespace App\Application\DTO;
 
 use App\Application\Helper\Str;
 use App\Application\Interface\DTOInterface;
+use InvalidArgumentException;
 
 abstract class DTO implements DTOInterface
 {
     protected static array $validateRules = [];
+
     protected static array $hidden = [];
 
     public static function getValidateRules(): array
@@ -23,7 +25,7 @@ abstract class DTO implements DTOInterface
 
         foreach ($parameters as $key => $value) {
             if (! property_exists($dto, $key)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf('Attribute %s does not exist in %s', $key, get_class($dto))
                 );
             }
