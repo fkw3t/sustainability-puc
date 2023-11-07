@@ -30,28 +30,33 @@ final class RegisterUser
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/user/register",
-     *     summary="registration",
-     *     tags={"user"},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         description="Request body",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string", example="Cleia Souza Fonseca"),
-     *             @OA\Property(property="document", type="string", example="93709123046"),
-     *             @OA\Property(property="email", type="string", format="email", example="cleia@mail.com"),
-     *             @OA\Property(property="password", type="string", example="1234578"),
-     *             @OA\Property(property="birthdate", type="string", example="1990-01-20")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Created"),
-     *     @OA\Response(response=400, description="Bad request"),
-     *     @OA\Response(response=409, description="User already registered"),
-     *     @OA\Response(response=422, description="Invalid body parameter"),
-     * )
-     */
+    #[OA\Post(
+        path: "/api/user/register",
+        summary: "registration",
+        tags: ["user"]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        description: "Request body",
+        content: [
+            "application/json" => [
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => ['type' => 'string', 'example' => 'Cleia Souza Fonseca'],
+                        'document' => ['type' => 'string', 'example' => '93709123046'],
+                        'email' => ['type' => 'string', 'format' => 'email', 'example' => 'cleia@mail.com'],
+                        'password' => ['type' => 'string', 'example' => '1234578'],
+                        'birthdate' => ['type' => 'string', 'example' => '1990-01-20']
+                    ]
+                ]
+            ]
+        ]
+    )]
+    #[OA\Response(response: 201, description: "Created")]
+    #[OA\Response(response: 400, description: "Bad request")]
+    #[OA\Response(response: 409, description: "User already registered")]
+    #[OA\Response(response: 422, description: "Invalid body parameter")]
     public function handle(RegisterUserRequest $request, ResponseInterface $response): PsrResponseInterface
     {
         try {
