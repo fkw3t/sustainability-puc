@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Service;
 
+use App\Application\DTO\ExternalProductManager\Request\AssignProductRequestDTO;
 use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
 use App\Application\Interface\ExternalProductManagerServiceInterface;
 use App\Application\Interface\ProductServiceInterface;
@@ -42,5 +43,13 @@ class ProductService implements ProductServiceInterface
         return $this->repository->create(
             $this->mapper->transformResponseDTOToEntity($product)
         );
+    }
+
+    public function assign(AssignProductRequestDTO $assignDTO): bool
+    {
+        // TODO: validate user exists, then throw ex
+        // TODO: validate product exists, then throw ex
+        //
+        return true;
     }
 }

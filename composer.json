@@ -15,6 +15,7 @@
         "php": ">=8.0",
         "crayxn/hyperf-xdebug": "dev-main",
         "firebase/php-jwt": "^6.9",
+        "hyperf/async-queue": "^3.0",
         "hyperf/cache": "~3.0.0",
         "hyperf/command": "~3.0.0",
         "hyperf/config": "~3.0.0",

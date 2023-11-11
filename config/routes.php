@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Infrastructure\Http\Documentation\Handler\DocumentationOpenApi;
 use App\Infrastructure\Http\Middleware\BasicAuthMiddleware;
+use App\Infrastructure\Http\Product\Handler\AssignProduct;
 use App\Infrastructure\Http\Product\Handler\GetProduct;
 use App\Infrastructure\Http\User\Handler\AuthenticateUser;
 use App\Infrastructure\Http\User\Handler\RegisterUser;
@@ -28,5 +29,6 @@ Router::addGroup('/api', static function (): void {
 
     Router::addGroup('/product', static function (): void {
         Router::get('', [GetProduct::class, 'handle']);
+        Router::get('/assign', [AssignProduct::class, 'handle']);
     }, ['middleware' => [BasicAuthMiddleware::class]]);
 });

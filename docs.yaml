@@ -14,6 +14,46 @@ servers:
     url: 'https://httpelitm.dev'
     description: 'production environment'
 paths:
+  /api/product/assign:
+    post:
+      tags:
+        - product
+      summary: 'assign product to a user'
+      operationId: 1b7d683012475f2c603758acbac0834f
+      requestBody:
+        description: 'Request body'
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: string
+                  example: 837ad4e7-b401-4406-a0b0-fe1f3016ca0b
+                product_barcode:
+                  type: string
+                  example: '7896070511019'
+                expire_date:
+                  type: string
+                  example: '2023-12-24'
+                quantity:
+                  type: integer
+                  example: 2
+              type: object
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'Product/user not found'
+        '400':
+          description: 'Bad request'
+        '422':
+          description: 'Unprocessable request'
+      security:
+        -
+          auth: []
   /api/product:
     get:
       tags:
