@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Product;
+use App\Domain\Entity\User;
 use App\Domain\Repository\ProductRepositoryInterface;
 use Hyperf\DbConnection\Db as DB;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -49,6 +51,17 @@ class ProductRepository implements ProductRepositoryInterface
             'description'   => $product->description,
             'average_price' => $product->price,
             'image_url'     => $product->image,
+        ]);
+    }
+
+    public function assign(Product $product, User $user, int $quantity): bool
+    {
+        return DB::table('users_products')->insert([
+            'id'          => Uuid::uuid4(),
+            'user_id'     => $user->id,
+            'product_id'  => $product->barcode,
+            'expire_date' => $product->getExpireDate()->format('Y-m-d'),
+            'quantity'    => $quantity
         ]);
     }
 }

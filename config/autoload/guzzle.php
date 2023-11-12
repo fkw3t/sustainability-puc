@@ -13,6 +13,7 @@ return [
             'headers'         => [
                 'X-Cosmos-Token' => env('EXTERNAL_PRODUCT_MANAGER_AUTH_KEY'),
             ],
+            'verify'          => false,
         ],
     ],
 ];

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\DTO\ExternalProductManager\Request;
+namespace App\Application\DTO\Product\Request;
 
 use App\Application\DTO\DTO;
 

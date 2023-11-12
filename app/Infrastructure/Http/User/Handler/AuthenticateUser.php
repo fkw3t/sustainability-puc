@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\User\Handler;
 
-use App\Application\DTO\User\AuthenticateDTO;
+use App\Application\DTO\User\Request\AuthenticateRequestDTO;
 use App\Application\Exception\InvalidCredentialsException;
 use App\Application\Exception\UserNotFoundException;
 use App\Application\Interface\UserServiceInterface;
@@ -50,12 +50,12 @@ final class AuthenticateUser
     public function handle(AuthenticateRequest $request, ResponseInterface $response): PsrResponseInterface
     {
         try {
-            $authenticateDTO = new AuthenticateDTO(
+            $authenticateDTO = new AuthenticateRequestDTO(
                 $request->input('email'),
                 $request->input('password'),
             );
 
-            return $response->json(['token' => $this->service->authenticate($authenticateDTO)])
+            return $response->json($this->service->authenticate($authenticateDTO)->toArray())
                 ->withStatus(ResponseCode::HTTP_OK);
         } catch (InvalidCredentialsException|UserNotFoundException $exception) {
             return $response->json([

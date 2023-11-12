@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Mapper;
 
-use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
+use App\Application\DTO\Product\Structure\ProductResponseDTO;
 use App\Domain\Entity\Product;
 
 final class ProductMapper

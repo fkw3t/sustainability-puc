@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Service;
 
-use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
-use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
+use App\Application\DTO\Product\Structure\ProductResponseDTO;
+use App\Application\DTO\Product\Structure\ProductsResponseDTO;
 use App\Application\Interface\ExternalProductManagerServiceInterface;
 use App\Domain\Repository\ExternalProductManagerRepositoryInterface;
 use Hyperf\Logger\LoggerFactory;

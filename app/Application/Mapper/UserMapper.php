@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Mapper;
 
-use App\Application\DTO\User\RegisterUserRequestDTO;
+use App\Application\DTO\User\Request\RegisterUserRequestDTO;
 use App\Domain\Entity\User;
 use App\Domain\ValueObject\Document;
 use DateTime;

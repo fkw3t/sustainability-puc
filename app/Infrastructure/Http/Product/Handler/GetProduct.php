@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Product\Handler;
 
-use App\Application\DTO\ExternalProductManager\Request\GetProductRequestDTO;
+use App\Application\DTO\Product\Request\GetProductRequestDTO;
 use App\Application\Exception\Product\ProductNotFoundException;
 use App\Application\Interface\ExternalProductManagerServiceInterface;
 use App\Application\Interface\ProductServiceInterface;

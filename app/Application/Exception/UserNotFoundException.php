@@ -13,6 +13,6 @@ class UserNotFoundException extends Exception
 
     public function __construct()
     {
-        parent::__construct('We cannot find user with this email', $this->code);
+        parent::__construct('We cannot find this user', $this->code);
     }
 }

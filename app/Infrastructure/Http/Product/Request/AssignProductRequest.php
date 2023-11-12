@@ -16,10 +16,15 @@ class AssignProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'         => 'required|uuid',
-            'product_barcode' => 'required|string',
-            'expire_date'     => 'required|date_format:Y-m-d',
-            'quantity'        => 'required|integer',
+            'user_id'               => 'required|uuid',
+            'product.barcode'       => 'required|string',
+            'product.name'          => 'required|string',
+            'product.brand'         => 'nullable|string',
+            'product.description'   => 'nullable|string',
+            'product.average_price' => 'nullable|numeric',
+            'product.image_url'     => 'nullable|string',
+            'expire_date'           => 'required|date_format:Y-m-d|after:today',
+            'quantity'              => 'required|integer',
         ];
     }
 }

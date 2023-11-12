@@ -1,0 +1,167 @@
+openapi: 3.0.0
+info:
+  title: 'sustainability api'
+  description: 'a REST API for sustainability work school project'
+  contact:
+    name: 'sustainability owners'
+    url: 'https://github.com/fkw3t'
+  version: '1.0'
+servers:
+  -
+    url: 'http://0.0.0.0:9999'
+    description: 'local environment'
+  -
+    url: 'https://httpelitm.dev'
+    description: 'production environment'
+paths:
+  /api/product/assign:
+    post:
+      tags:
+        - product
+      summary: 'assign product to a user'
+      operationId: 1b7d683012475f2c603758acbac0834f
+      requestBody:
+        description: 'Request body'
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: string
+                  example: 837ad4e7-b401-4406-a0b0-fe1f3016ca0b
+                product:
+                  properties: { barcode: { type: string, example: '123' }, name: { type: string, example: 'Biscoito Nestle' }, brand: { type: string, example: Nestle, nullable: true }, description: { type: string, example: 'Biscoito de aveia Nestle', nullable: true }, average_price: { type: number, example: 15.5, nullable: true }, image_url: { type: string, example: 'https://cdn-cosmos.bluesoft.com.br/products/7891000025871', nullable: true } }
+                  type: object
+                expire_date:
+                  type: string
+                  example: '2023-12-24'
+                quantity:
+                  type: integer
+                  example: 2
+              type: object
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'Product/user not found'
+        '400':
+          description: 'Bad request'
+        '422':
+          description: 'Unprocessable request'
+      security:
+        -
+          auth: []
+  /api/product:
+    get:
+      tags:
+        - product
+      summary: 'list product(s)'
+      operationId: af396c160a2e9ec9f01a92bcbd3f984e
+      parameters:
+        -
+          name: searchable_field
+          in: query
+          description: 'campo de pesquisa (name ou barcode)'
+          required: true
+          schema:
+            type: string
+          example: 'name | barcode'
+        -
+          name: value
+          in: query
+          description: 'valor a ser pesquisado'
+          required: true
+          schema:
+            type: string
+          example: 'pao pullman | 7896070511019'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'Product not found'
+        '400':
+          description: 'Bad request'
+      security:
+        -
+          auth: []
+  /api/user/authenticate:
+    post:
+      tags:
+        - user
+      summary: authenticate
+      operationId: 3e7912217c3db2d27583bee849442087
+      requestBody:
+        description: 'Request body'
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: cleia@mail.com
+                password:
+                  type: string
+                  format: password
+                  example: '12345'
+              type: object
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'User not found'
+        '400':
+          description: 'Bad request'
+  /api/user/register:
+    post:
+      tags:
+        - user
+      summary: registration
+      operationId: 491efd1e6fe249600e1592456e69c6c4
+      requestBody:
+        description: 'Request body'
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  example: 'Cleia Souza Fonseca'
+                document:
+                  type: string
+                  example: '93709123046'
+                email:
+                  type: string
+                  format: email
+                  example: cleia@mail.com
+                password:
+                  type: string
+                  example: '1234578'
+                birthdate:
+                  type: string
+                  example: '1990-01-20'
+              type: object
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: 'Bad request'
+        '409':
+          description: 'User already registered'
+        '422':
+          description: 'Invalid body parameter'
+components:
+  securitySchemes:
+    auth:
+      type: http
+      bearerFormat: JWT
+      scheme: bearer

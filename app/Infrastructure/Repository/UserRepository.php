@@ -59,4 +59,14 @@ class UserRepository implements UserRepositoryInterface
             ? $this->mapper->dbModelToEntity($model)
             : null;
     }
+
+    public function find(string $id): ?User
+    {
+        $model = DB::table('users')
+            ->find($id);
+
+        return $model
+            ? $this->mapper->dbModelToEntity($model)
+            : null;
+    }
 }

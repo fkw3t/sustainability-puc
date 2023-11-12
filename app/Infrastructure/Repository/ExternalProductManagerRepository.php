@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
-use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
-use App\Application\DTO\ExternalProductManager\Structure\ProductsResponseDTO;
+use App\Application\DTO\Product\Structure\ProductResponseDTO;
+use App\Application\DTO\Product\Structure\ProductsResponseDTO;
 use App\Application\Exception\InvalidAPIKeyException;
 use App\Application\Exception\Product\ProductNotFoundException;
 use App\Domain\Repository\ExternalProductManagerRepositoryInterface;

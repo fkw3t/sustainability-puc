@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Application\Service;
 
-use App\Application\DTO\ExternalProductManager\Request\AssignProductRequestDTO;
-use App\Application\DTO\ExternalProductManager\Structure\ProductResponseDTO;
+use App\Application\DTO\Product\Request\AssignProductRequestDTO;
+use App\Application\DTO\Product\Structure\ProductResponseDTO;
+use App\Application\Exception\Product\ProductNotFoundException;
+use App\Application\Exception\UserNotFoundException;
 use App\Application\Interface\ExternalProductManagerServiceInterface;
 use App\Application\Interface\ProductServiceInterface;
+use App\Application\Interface\UserServiceInterface;
 use App\Application\Mapper\ProductMapper;
 use App\Domain\Repository\ProductRepositoryInterface;
 use Hyperf\Logger\LoggerFactory;
@@ -18,9 +21,10 @@ class ProductService implements ProductServiceInterface
     private LoggerInterface $logger;
 
     public function __construct(
-        private readonly ExternalProductManagerServiceInterface $externalProductService,
         private readonly ProductRepositoryInterface $repository,
-        private readonly ProductMapper $mapper,
+        private readonly ProductMapper $productMapper,
+        private readonly ExternalProductManagerServiceInterface $externalProductService,
+        private readonly UserServiceInterface $userService,
         LoggerFactory $loggerFactory,
     ) {
         $this->logger = $loggerFactory->get('log', 'default');
@@ -29,7 +33,7 @@ class ProductService implements ProductServiceInterface
     public function getProductByBarcode(string $barcode): ProductResponseDTO
     {
         if ($product = $this->repository->findByBarcode($barcode)) {
-            return $this->mapper->transformEntityToResponseDTO($product);
+            return $this->productMapper->transformEntityToResponseDTO($product);
         }
 
         $product = $this->externalProductService->getProductByBarcode($barcode);
@@ -41,15 +45,24 @@ class ProductService implements ProductServiceInterface
     public function create(ProductResponseDTO $product): bool
     {
         return $this->repository->create(
-            $this->mapper->transformResponseDTOToEntity($product)
+            $this->productMapper->transformResponseDTOToEntity($product)
         );
     }
 
+    /**
+     * @throws ProductNotFoundException
+     */
     public function assign(AssignProductRequestDTO $assignDTO): bool
     {
-        // TODO: validate user exists, then throw ex
-        // TODO: validate product exists, then throw ex
-        //
-        return true;
+        /** @throws UserNotFoundException */
+        $user = $this->userService->findUser($assignDTO->userId);
+
+        if(! $product = $this->repository->findByBarcode($assignDTO->productResponseDTO->barcode)) {
+            throw new ProductNotFoundException();
+        };
+
+        $product->setExpireDate($assignDTO->expireDate);
+
+        return $this->repository->assign($product, $user, $assignDTO->quantity);
     }
 }

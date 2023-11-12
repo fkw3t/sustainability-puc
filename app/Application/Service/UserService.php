@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Application\Service;
 
-use App\Application\DTO\User\AuthenticateDTO;
-use App\Application\DTO\User\RegisterUserRequestDTO;
+use App\Application\DTO\User\Request\AuthenticateRequestDTO;
+use App\Application\DTO\User\Request\RegisterUserRequestDTO;
+use App\Application\DTO\User\Structure\AuthenticateResponseDTO;
 use App\Application\Exception\InvalidCredentialsException;
 use App\Application\Exception\User\AlreadyRegisteredUser;
 use App\Application\Exception\UserNotFoundException;
 use App\Application\Interface\UserServiceInterface;
 use App\Application\Mapper\UserMapper;
+use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepositoryInterface;
 use Firebase\JWT\JWT;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
-
 use function Hyperf\Support\env;
 
 final readonly class UserService implements UserServiceInterface
@@ -55,7 +56,7 @@ final readonly class UserService implements UserServiceInterface
      * @throws InvalidCredentialsException
      * @throws UserNotFoundException
      */
-    public function authenticate(AuthenticateDTO $dto): string
+    public function authenticate(AuthenticateRequestDTO $dto): AuthenticateResponseDTO
     {
         if (! $user = $this->repository->findByEmail($dto->email)) {
             throw new UserNotFoundException();
@@ -65,10 +66,19 @@ final readonly class UserService implements UserServiceInterface
             throw new InvalidCredentialsException();
         }
 
-        return JWT::encode(
-            ['email' => $user->email],
-            env('JWT_SECRET_KEY'),
-            'HS256'
+        return new AuthenticateResponseDTO(
+            $user->id,
+            $user->name,
+            $user->email,
+            JWT::encode(['email' => $user->email], env('JWT_SECRET_KEY'),'HS256')
         );
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    public function findUser(string $id): ?User
+    {
+        return $this->repository->find($id) ?? throw new UserNotFoundException();
     }
 }

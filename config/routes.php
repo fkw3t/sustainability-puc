@@ -29,6 +29,6 @@ Router::addGroup('/api', static function (): void {
 
     Router::addGroup('/product', static function (): void {
         Router::get('', [GetProduct::class, 'handle']);
-        Router::get('/assign', [AssignProduct::class, 'handle']);
+        Router::post('/assign', [AssignProduct::class, 'handle']);
     }, ['middleware' => [BasicAuthMiddleware::class]]);
 });

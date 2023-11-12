@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\User\Handler;
 
-use App\Application\DTO\User\RegisterUserRequestDTO;
+use App\Application\DTO\User\Request\RegisterUserRequestDTO;
 use App\Application\Exception\User\AlreadyRegisteredUser;
 use App\Application\Interface\UserServiceInterface;
 use App\Domain\Exception\InvalidDocumentException;
@@ -13,7 +13,6 @@ use DateTime;
 use Exception;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Logger\LoggerFactory;
-use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response as ResponseCode;
