@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9a1d69a19cac273c42dcd71fc291ca6",
+    "content-hash": "33bff1e570ac49cea7c943330e73c380",
     "packages": [
         {
             "name": "brick/math",
@@ -668,6 +668,69 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.9.0"
             },
             "time": "2023-10-05T00:24:42+00:00"
+        },
+        {
+            "name": "gokure/hyperf-cors",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gokure/hyperf-cors.git",
+                "reference": "b882865646cfcac652568e953a89d43a1cebef68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gokure/hyperf-cors/zipball/b882865646cfcac652568e953a89d43a1cebef68",
+                "reference": "b882865646cfcac652568e953a89d43a1cebef68",
+                "shasum": ""
+            },
+            "require": {
+                "ext-swoole": ">= 4.5",
+                "hyperf/di": "^2.2|^3.0",
+                "hyperf/http-server": "^2.2|^3.0",
+                "php": ">= 7.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.6",
+                "hyperf/config": "^2.2|^3.0",
+                "hyperf/testing": "^2.2|^3.0",
+                "hyperf/validation": "^2.2|^3.0",
+                "mockery/mockery": "^1.4",
+                "phpstan/phpstan": "^1.4"
+            },
+            "type": "library",
+            "extra": {
+                "hyperf": {
+                    "config": "Gokure\\HyperfCors\\ConfigProvider"
+                },
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gokure\\HyperfCors\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gang Wu",
+                    "email": "gokure@gmail.com"
+                }
+            ],
+            "description": "Adds CORS (Cross-Origin Resource Sharing) headers support in your Hyperf application.",
+            "keywords": [
+                "cors",
+                "hyperf"
+            ],
+            "support": {
+                "issues": "https://github.com/gokure/hyperf-cors/issues",
+                "source": "https://github.com/gokure/hyperf-cors/tree/v2.0.0"
+            },
+            "time": "2023-01-05T13:23:24+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -9856,5 +9919,5 @@
         "php": ">=8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
