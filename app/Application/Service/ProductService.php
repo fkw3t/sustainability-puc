@@ -63,7 +63,9 @@ class ProductService implements ProductServiceInterface
         $user = $this->userService->findUser($assignDTO->userId);
 
         if(! $product = $this->repository->findByBarcode($assignDTO->productResponseDTO->barcode)) {
-            throw new ProductNotFoundException();
+            $this->repository->create(
+                $this->productMapper->transformResponseDTOToEntity($assignDTO->productResponseDTO)
+            );
         };
 
         $product->setExpireDate($assignDTO->expireDate);
