@@ -7,6 +7,8 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Entity\Product;
 use App\Domain\Entity\User;
 use App\Domain\Repository\ProductRepositoryInterface;
+use Carbon\Traits\Date;
+use DateTimeInterface;
 use Hyperf\DbConnection\Db as DB;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
@@ -52,6 +54,8 @@ class ProductRepository implements ProductRepositoryInterface
             'average_price' => $product->price,
             'image_url'     => $product->image,
         ]);
+
+        // TODO: fix all timestamps
     }
 
     public function assign(Product $product, User $user, int $quantity): bool
@@ -63,5 +67,32 @@ class ProductRepository implements ProductRepositoryInterface
             'expire_date' => $product->getExpireDate()->format('Y-m-d'),
             'quantity'    => $quantity
         ]);
+    }
+
+    public function findByDate(
+        User $user,
+        DateTimeInterface $startDate,
+        DateTimeInterface $endDate = null
+    ): array {
+        return DB::table('users_products')
+            ->join('products', 'users_products.product_id', '=', 'products.barcode')
+            ->where('users_products.user_id', $user->id)
+            ->where('users_products.expire_date', '>=', $startDate->format('Y-m-d'))
+            ->where(function ($query) use ($endDate) {
+                if ($endDate) {
+                    $query->where('users_products.expire_date', '<=', $endDate->format('Y-m-d'));
+                }
+            })
+            ->get([
+                'products.barcode',
+                'products.name',
+                'products.brand',
+                'products.description',
+                'products.average_price',
+                'products.image_url',
+                'users_products.expire_date',
+                'users_products.quantity'
+            ])
+            ->toArray();
     }
 }

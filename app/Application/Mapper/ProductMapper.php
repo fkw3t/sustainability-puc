@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Application\Mapper;
 
 use App\Application\DTO\Product\Structure\ProductResponseDTO;
+use App\Application\DTO\Product\Structure\UserRegisteredProductDTO;
 use App\Domain\Entity\Product;
+use DateTime;
+use DateTimeImmutable;
 
 final class ProductMapper
 {
@@ -30,6 +33,24 @@ final class ProductMapper
             $product->brand ?? null,
             $product->price ?? null,
             $product->image ?? null,
+        );
+    }
+
+    public function transformArrayRegisteredProductToDTO(array $productList): UserRegisteredProductDTO
+    {
+        $now = new DateTimeImmutable();
+        $expireDate = DateTimeImmutable::createFromFormat('Y-m-d', $productList['expire_date']);
+
+        return new UserRegisteredProductDTO(
+            $productList['barcode'],
+            $productList['name'],
+            $productList['description'] ?? null,
+            $productList['brand'] ?? null,
+            (float) $productList['average_price'] ?? null,
+            $productList['image_url'] ?? null,
+            $expireDate->format('Y-m-d'),
+            $productList['quantity'],
+            $now->diff($expireDate)->days,
         );
     }
 }

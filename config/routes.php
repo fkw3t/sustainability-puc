@@ -6,6 +6,7 @@ use App\Infrastructure\Http\Documentation\Handler\DocumentationOpenApi;
 use App\Infrastructure\Http\Middleware\BasicAuthMiddleware;
 use App\Infrastructure\Http\Product\Handler\AssignProduct;
 use App\Infrastructure\Http\Product\Handler\GetProduct;
+use App\Infrastructure\Http\Product\Handler\ListUserRegisteredProducts;
 use App\Infrastructure\Http\User\Handler\AuthenticateUser;
 use App\Infrastructure\Http\User\Handler\RegisterUser;
 use Hyperf\HttpServer\Router\Router;
@@ -30,5 +31,6 @@ Router::addGroup('/api', static function (): void {
     Router::addGroup('/product', static function (): void {
         Router::get('', [GetProduct::class, 'handle']);
         Router::post('/assign', [AssignProduct::class, 'handle']);
+        Router::get('/user/{id}', [ListUserRegisteredProducts::class, 'handle']);
     }, ['middleware' => [BasicAuthMiddleware::class]]);
 });
