@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Application\DTO\Product\Structure;
 
 use App\Application\DTO\DTO;
-use DateTimeInterface;
 
 final class UserRegisteredProductDTO extends DTO
 {
@@ -16,7 +15,7 @@ final class UserRegisteredProductDTO extends DTO
         public ?string $brand,
         public ?float $averagePrice,
         public ?string $imageUrl,
-        public String $expireDate,
+        public string $expireDate,
         public int $quantity,
         public int $daysUntilExpiry
     ) {

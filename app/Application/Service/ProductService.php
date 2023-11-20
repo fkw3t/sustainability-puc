@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Application\Service;
 
 use App\Application\DTO\Product\Request\AssignProductRequestDTO;
+use App\Application\DTO\Product\Structure\ExpiringProductNotificationDTO;
+use App\Application\DTO\Product\Structure\ExpiringProductsNotificationDTO;
 use App\Application\DTO\Product\Structure\ProductResponseDTO;
 use App\Application\DTO\Product\Structure\UserRegisteredProductDTO;
 use App\Application\DTO\Product\Structure\UserRegisteredProductsFromExpireDateResponseDTO;
@@ -14,9 +16,9 @@ use App\Application\Interface\ExternalProductManagerServiceInterface;
 use App\Application\Interface\ProductServiceInterface;
 use App\Application\Interface\UserServiceInterface;
 use App\Application\Mapper\ProductMapper;
+use App\Domain\Exception\InvalidExpireDateException;
 use App\Domain\Repository\ProductRepositoryInterface;
 use DateInterval;
-use DateTime;
 use DateTimeImmutable;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
@@ -55,18 +57,22 @@ class ProductService implements ProductServiceInterface
     }
 
     /**
-     * @throws ProductNotFoundException
+     * @param AssignProductRequestDTO $assignDTO
+     * @return bool
+     * @throws InvalidExpireDateException
      */
     public function assign(AssignProductRequestDTO $assignDTO): bool
     {
         /** @throws UserNotFoundException */
         $user = $this->userService->findUser($assignDTO->userId);
 
-        if(! $product = $this->repository->findByBarcode($assignDTO->productResponseDTO->barcode)) {
+        if (! $product = $this->repository->findByBarcode($assignDTO->productResponseDTO->barcode)) {
             $this->repository->create(
                 $this->productMapper->transformResponseDTOToEntity($assignDTO->productResponseDTO)
             );
-        };
+
+            $product = $this->repository->findByBarcode($assignDTO->productResponseDTO->barcode);
+        }
 
         $product->setExpireDate($assignDTO->expireDate);
 
@@ -101,6 +107,29 @@ class ProductService implements ProductServiceInterface
                 )
             ),
         );
+    }
+
+    public function todayExpiringProducts(): ExpiringProductsNotificationDTO
+    {
+        $data = $this->repository->findProductsCloseToExpiry();
+        $expiringProducts = [];
+        foreach ($data as $expiringProduct) {
+            $expiringProduct = (array) $expiringProduct;
+            $now = new DateTimeImmutable();
+            $expireDate = DateTimeImmutable::createFromFormat('Y-m-d', $expiringProduct['expire_date']);
+
+            $expiringProducts[] = new ExpiringProductNotificationDTO(
+                $expiringProduct['user_name'],
+                $expiringProduct['email'],
+                $expiringProduct['product_name'],
+                $expiringProduct['image_url'],
+                $expiringProduct['expire_date'],
+                $expiringProduct['quantity'],
+                $now->diff($expireDate)->days,
+            );
+        }
+
+        return new ExpiringProductsNotificationDTO($expiringProducts);
     }
 
     /** @return UserRegisteredProductDTO[] */

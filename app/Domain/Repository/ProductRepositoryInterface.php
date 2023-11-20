@@ -14,4 +14,5 @@ interface ProductRepositoryInterface
     public function create(Product $product): bool;
     public function assign(Product $product, User $user, int $quantity): bool;
     public function findByDate(User $user, DateTimeInterface $startDate, DateTimeInterface $endDate = null): array;
+    public function findProductsCloseToExpiry(): array;
 }

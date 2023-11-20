@@ -7,7 +7,8 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Entity\Product;
 use App\Domain\Entity\User;
 use App\Domain\Repository\ProductRepositoryInterface;
-use Carbon\Traits\Date;
+use DateInterval;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Hyperf\DbConnection\Db as DB;
 use Hyperf\Logger\LoggerFactory;
@@ -65,7 +66,7 @@ class ProductRepository implements ProductRepositoryInterface
             'user_id'     => $user->id,
             'product_id'  => $product->barcode,
             'expire_date' => $product->getExpireDate()->format('Y-m-d'),
-            'quantity'    => $quantity
+            'quantity'    => $quantity,
         ]);
     }
 
@@ -91,7 +92,28 @@ class ProductRepository implements ProductRepositoryInterface
                 'products.average_price',
                 'products.image_url',
                 'users_products.expire_date',
-                'users_products.quantity'
+                'users_products.quantity',
+            ])
+            ->toArray();
+    }
+
+    public function findProductsCloseToExpiry(): array
+    {
+        $now = new DateTimeImmutable();
+        $endDate = $now->add(new DateInterval('P3D'));
+
+        return DB::table('users_products')
+            ->join('products', 'users_products.product_id', '=', 'products.barcode')
+            ->join('users', 'users_products.user_id', '=', 'users.id')
+            ->where('users_products.expire_date', '>=', $now->format('Y-m-d'))
+            ->where('users_products.expire_date', '<=', $endDate->format('Y-m-d'))
+            ->get([
+                'users.name as user_name',
+                'users.email',
+                'products.name as product_name',
+                'products.image_url',
+                'users_products.expire_date',
+                'users_products.quantity',
             ])
             ->toArray();
     }

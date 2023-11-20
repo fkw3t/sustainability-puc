@@ -11,8 +11,7 @@ services:
       - .:/opt/www
     depends_on:
       - db
-    networks:
-      - sustainability
+      - redis
   db:
     image: mysql:5.7
     container_name: sustainability-db
@@ -27,8 +26,11 @@ services:
       SERVICE_NAME: mysql
     ports:
       - "3308:3306"
-    networks:
-      - sustainability
+  redis:
+    container_name: sustainability-redis
+    image: redis:6.2
+    ports:
+      - "6379:6379"
 networks:
   sustainability:
     driver: bridge
