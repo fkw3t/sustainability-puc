@@ -17,7 +17,7 @@ use function Hyperf\ViewEngine\view;
 )]
 #[OA\Contact(name: 'sustainability owners', url: 'https://github.com/fkw3t')]
 #[OA\Server(url: 'http://0.0.0.0:9999', description: 'local environment')]
-#[OA\Server(url: 'http://ec2-54-207-175-133.sa-east-1.compute.amazonaws.com', description: 'production environment')]
+#[OA\Server(url: 'https://helloelitxmq.com', description: 'production environment')]
 #[OA\SecurityScheme(securityScheme: 'auth', type: 'http', bearerFormat: 'JWT', scheme: 'bearer')]
 final readonly class DocumentationOpenApi
 {

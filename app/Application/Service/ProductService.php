@@ -103,7 +103,7 @@ class ProductService implements ProductServiceInterface
             $this->formatRegisteredProductsList(
                 $this->repository->findByDate(
                     $user,
-                    $now->sub(new DateInterval('P14D'))
+                    $now->add(new DateInterval('P14D'))
                 )
             ),
         );
