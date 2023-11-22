@@ -13,8 +13,8 @@ use Psr\Log\LoggerInterface;
 use Throwable;
 
 #[Crontab(
-    rule: '*/10 * * * *',
-    //        rule: '*/10 * * * * *',
+//        rule: '*/10 * * * *',
+    rule: '*/10 * * * * *',
     name: 'ExpiringProductsNotification',
     callback: 'handle',
     memo: 'This is user expiring products notification scheduled task'
@@ -37,7 +37,21 @@ class ExpiringProductsNotificationTask
             $this->logger->info('Processing users expiring products notification task');
             $expiringProductsNotificationDTO = $this->productService->todayExpiringProducts();
 
-            $this->notificationQueueService->push($expiringProductsNotificationDTO);
+            foreach ($expiringProductsNotificationDTO->expiringProducts as $expiringProduct) {
+                try {
+                    $this->notificationQueueService->push($expiringProduct);
+                } catch (Throwable|Exception $exception) {
+                    $this->logger->error(__CLASS__ . __FUNCTION__, [
+                        'data'    => $expiringProduct,
+                        'message' => $exception->getMessage(),
+                        'line'    => $exception->getLine(),
+                        'file'    => $exception->getFile(),
+                        'trace'   => $exception->getTraceAsString(),
+                    ]);
+
+                    continue;
+                }
+            }
         } catch (Throwable|Exception $exception) {
             $this->logger->error(__CLASS__ . __FUNCTION__, [
                 'message' => $exception->getMessage(),

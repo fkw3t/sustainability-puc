@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Application\Service;
 
-use App\Application\DTO\Product\Structure\ExpiringProductsNotificationDTO;
+use App\Application\DTO\Product\Structure\ExpiringProductNotificationDTO;
 use App\Application\Job\SendExpiringProductsMail;
 use Hyperf\AsyncQueue\Driver\DriverFactory;
 use Hyperf\AsyncQueue\Driver\DriverInterface;
 use Hyperf\Logger\LoggerFactory;
+use Hyperf\View\RenderInterface;
+use Symfony\Component\Mailer\MailerInterface;
+
+use function Hyperf\Support\make;
 
 class NotificationQueueService
 {
@@ -20,15 +24,15 @@ class NotificationQueueService
     }
 
     public function push(
-        ExpiringProductsNotificationDTO $params,
+        ExpiringProductNotificationDTO $params,
         $delay = 0
     ): bool {
         return $this->driver->push(
-            new SendExpiringProductsMail(
-                $params,
-                make(LoggerFactory::class)
+            job: new SendExpiringProductsMail(
+                params: $params,
+                loggerFactory: make(LoggerFactory::class),
             ),
-            $delay
+            delay: $delay
         );
     }
 }

@@ -31,6 +31,15 @@ services:
     image: redis:6.2
     ports:
       - "6379:6379"
+  mailhog:
+    container_name: sustainability-mail
+    image: mailhog/mailhog
+    restart: always
+    logging:
+      driver: 'none'
+    ports:
+      - "8025:8025"
+      - "1025:1025"
 networks:
   sustainability:
     driver: bridge

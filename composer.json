@@ -40,6 +40,8 @@
         "hyperf/view-engine": "^3.0",
         "hyperf/watcher": "^3.0",
         "ramsey/uuid": "^4.7",
+        "symfony/mailer": "^6.3",
+        "symfony/mime": "^6.3",
         "zircote/swagger-php": "^4.7"
     },
     "require-dev": {
