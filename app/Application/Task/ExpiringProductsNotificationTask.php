@@ -13,8 +13,7 @@ use Psr\Log\LoggerInterface;
 use Throwable;
 
 #[Crontab(
-//        rule: '*/10 * * * *',
-    rule: '*/10 * * * * *',
+    rule: '0 * * * *',
     name: 'ExpiringProductsNotification',
     callback: 'handle',
     memo: 'This is user expiring products notification scheduled task'
