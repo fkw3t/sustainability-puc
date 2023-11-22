@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Infrastructure\Http\Documentation\Handler\DocumentationOpenApi;
+use App\Infrastructure\Http\Mailhog\MailhogRedirect;
 use App\Infrastructure\Http\Middleware\BasicAuthMiddleware;
 use App\Infrastructure\Http\Product\Handler\AssignProduct;
 use App\Infrastructure\Http\Product\Handler\GetProduct;
@@ -21,6 +22,8 @@ Router::get('/info', function () {
 Router::get('/docs', [DocumentationOpenApi::class, 'html']);
 Router::get('/docs.json', [DocumentationOpenApi::class, 'json']);
 Router::get('/docs.yaml', [DocumentationOpenApi::class, 'yaml']);
+
+Router::get('/mailhog', [MailhogRedirect::class, 'handle']);
 
 Router::addGroup('/api', static function (): void {
     Router::addGroup('/user', static function (): void {
